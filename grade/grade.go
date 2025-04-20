@@ -1,6 +1,7 @@
 package grade
 
 import (
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -63,11 +64,39 @@ func convert(s string) (string, int, int, int) {
 }
 
 func (s *SubjectStore) RemoveTest(data string) {
+	subject, test := convertTwoArg(data)
 
+	for i := 0; i < len(s.subjects); i++ {
+		if s.subjects[i].name == subject {
+			for j := 0; j < len(s.subjects[i].test); j++ {
+				if s.subjects[i].test[j] == test {
+					s.subjects[i].test = slices.Delete(s.subjects[i].test, j, j+1)
+				}
+			}
+		}
+	}
 }
 
 func (s *SubjectStore) RemoveHomework(data string) {
+	subject, homework := convertTwoArg(data)
 
+	for i := 0; i < len(s.subjects); i++ {
+		if s.subjects[i].name == subject {
+			for j := 0; j < len(s.subjects[i].homework); j++ {
+				if s.subjects[i].homework[j] == homework {
+					s.subjects[i].homework = slices.Delete(s.subjects[i].homework, j, j+1)
+				}
+			}
+		}
+	}
+}
+
+func convertTwoArg(s string) (string, int) {
+	splitted := strings.Split(s, " ")
+	subject := splitted[0]
+	firstArg, _ := strconv.Atoi(splitted[1])
+
+	return subject, firstArg
 }
 
 // extend the programm at the end with a change-function
