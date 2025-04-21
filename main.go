@@ -9,18 +9,21 @@ import (
 )
 
 func main() {
+	command := os.Args[1]
+	args := os.Args[2:]
 	var (
-		args         = os.Args
 		subjectList  grade.SubjectStore
 		subjectFlag  string
 		homeworkFlag string
 		testFlag     string
 	)
-	flag.StringVar(&subjectFlag, "-s", "", "help message for flagname")
-	flag.StringVar(&homeworkFlag, "-h", "", "help message for flagname")
-	flag.StringVar(&testFlag, "-t", "", "help message for flagname")
+	flag := flag.NewFlagSet(command, flag.ExitOnError)
+	flag.StringVar(&subjectFlag, "s", "", "help message for flagname")
+	flag.StringVar(&homeworkFlag, "h", "", "help message for flagname")
+	flag.StringVar(&testFlag, "t", "", "help message for flagname")
+	flag.Parse(args)
 
-	switch args[1] {
+	switch command {
 	case "add":
 		if subjectFlag != "" {
 			subjectList.AddSubject(subjectFlag)
