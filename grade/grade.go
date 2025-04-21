@@ -10,15 +10,21 @@ import (
 )
 
 type Subject struct {
-	Name string
-	// Homework
-	Homework          []int
-	PointsHomework    []int
-	MaxPointsHomework []int // check later if I need a int or a float number
-	// Tests
-	Test          []int
-	PointsTests   []int // check later if I need a int or a float number
-	MaxPointsTest []int
+	Name         string
+	HomeWorkList []Homework
+	TestList     []Test
+}
+
+type Homework struct {
+	Homework  int
+	Points    int
+	MaxPoints int
+}
+
+type Test struct {
+	Test      int
+	Points    int
+	MaxPoints int
 }
 
 type SubjectStore struct {
@@ -29,13 +35,9 @@ func (s *SubjectStore) AddSubject(name string) {
 	s.readJson()
 
 	newSubject := Subject{
-		Name:              name,
-		Homework:          []int{},
-		PointsHomework:    []int{},
-		MaxPointsHomework: []int{},
-		Test:              []int{},
-		PointsTests:       []int{},
-		MaxPointsTest:     []int{},
+		Name:         name,
+		HomeWorkList: []Homework{},
+		TestList:     []Test{},
 	}
 	s.subjects = append(s.subjects, newSubject)
 
@@ -46,11 +48,14 @@ func (s *SubjectStore) AddTest(data string) {
 	s.readJson()
 
 	subject, test, points, maxPoints := convert(data)
+	newTest := Test{
+		Test:      test,
+		Points:    points,
+		MaxPoints: maxPoints,
+	}
 	for i := 0; i < len(s.subjects); i++ {
 		if s.subjects[i].Name == subject {
-			s.subjects[i].Test = append(s.subjects[i].Test, test)
-			s.subjects[i].PointsTests = append(s.subjects[i].PointsTests, points)
-			s.subjects[i].MaxPointsTest = append(s.subjects[i].MaxPointsTest, maxPoints)
+			s.subjects[i].TestList = append(s.subjects[i].TestList, newTest)
 		}
 	}
 
@@ -61,12 +66,14 @@ func (s *SubjectStore) AddHomework(data string) {
 	s.readJson()
 
 	subject, homework, points, maxPoints := convert(data)
-
+	newHomework := Homework{
+		Homework:  homework,
+		Points:    points,
+		MaxPoints: maxPoints,
+	}
 	for i := 0; i < len(s.subjects); i++ {
 		if s.subjects[i].Name == subject {
-			s.subjects[i].Homework = append(s.subjects[i].Homework, homework)
-			s.subjects[i].PointsTests = append(s.subjects[i].PointsHomework, points)
-			s.subjects[i].MaxPointsTest = append(s.subjects[i].MaxPointsHomework, maxPoints)
+			s.subjects[i].HomeWorkList = append(s.subjects[i].HomeWorkList, newHomework)
 		}
 	}
 
