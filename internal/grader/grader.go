@@ -144,7 +144,7 @@ func (s *SubjectStore) GetTotalPercentage() {
 			hwstr = fmt.Sprintf("%.2f %%", (sumPointsHomework*100)/sumTotalPointsHomework)
 		}
 		if sumTotalPointsTest != 0 {
-			ttstring = fmt.Sprintf("%.2f %%\n\n", (sumPointsTest*100)/sumTotalPointsTest)
+			ttstring = fmt.Sprintf("%.2f %%", (sumPointsTest*100)/sumTotalPointsTest)
 		}
 		fmt.Printf("%-15s | %-15s | %-20s\n", s.subjects[i].Name, hwstr, ttstring)
 	}
