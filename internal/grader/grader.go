@@ -1,7 +1,8 @@
-package grade
+package grader
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"slices"
@@ -16,13 +17,13 @@ type Subject struct {
 }
 
 type Homework struct {
-	Homework  int
+	Homework  int // this is the number of the homework
 	Points    int
 	MaxPoints int
 }
 
 type Test struct {
-	Test      int
+	Test      int // this is the number of the test
 	Points    int
 	MaxPoints int
 }
@@ -87,11 +88,9 @@ func (s *SubjectStore) RemoveTest(data string) {
 
 	for i := 0; i < len(s.subjects); i++ {
 		if s.subjects[i].Name == subject {
-			for j := 0; j < len(s.subjects[i].Test); j++ {
-				if s.subjects[i].Test[j] == test {
-					s.subjects[i].Test = slices.Delete(s.subjects[i].Test, j, j+1)
-					s.subjects[i].PointsTests = slices.Delete(s.subjects[i].PointsTests, j, j+1)
-					s.subjects[i].MaxPointsTest = slices.Delete(s.subjects[i].MaxPointsTest, j, j+1)
+			for j := 0; j < len(s.subjects[i].TestList); j++ {
+				if s.subjects[i].TestList[j].Test == test {
+					s.subjects[i].TestList = slices.Delete(s.subjects[i].TestList, j, j+1)
 				}
 			}
 		}
@@ -107,17 +106,48 @@ func (s *SubjectStore) RemoveHomework(data string) {
 
 	for i := 0; i < len(s.subjects); i++ {
 		if s.subjects[i].Name == subject {
-			for j := 0; j < len(s.subjects[i].Homework); j++ {
-				if s.subjects[i].Homework[j] == Homework {
-					s.subjects[i].Homework = slices.Delete(s.subjects[i].Homework, j, j+1)
-					s.subjects[i].PointsHomework = slices.Delete(s.subjects[i].MaxPointsHomework, j, j+1)
-					s.subjects[i].MaxPointsHomework = slices.Delete(s.subjects[i].MaxPointsHomework, j, j+1)
+			for j := 0; j < len(s.subjects[i].HomeWorkList); j++ {
+				if s.subjects[i].HomeWorkList[j].Homework == Homework {
+					s.subjects[i].HomeWorkList = slices.Delete(s.subjects[i].HomeWorkList, j, j+1)
 				}
 			}
 		}
 	}
 
 	s.writeJson()
+}
+
+func (s *SubjectStore) GetTotalPercentage() {
+	s.readJson()
+	fmt.Printf("~Total points of all subjects~\n\n")
+	fmt.Printf("%-15s | %-15s | %-20s\n", "Subject", "Homeworks", "Tests")
+	fmt.Println(strings.Repeat("-", 55))
+	var sumPointsHomework, sumTotalPointsHomework, sumPointsTest, sumTotalPointsTest float32
+	for i := 0; i < len(s.subjects); i++ {
+		sumPointsHomework = 0
+		sumTotalPointsHomework = 0
+		sumPointsTest = 0
+		sumTotalPointsTest = 0
+		for j := 0; j < len(s.subjects[i].HomeWorkList); j++ {
+			sumPointsHomework += float32(s.subjects[i].HomeWorkList[j].Points)
+			sumTotalPointsHomework += float32(s.subjects[i].HomeWorkList[j].MaxPoints)
+		}
+
+		for j := 0; j < len(s.subjects[i].TestList); j++ {
+			sumPointsTest += float32(s.subjects[i].TestList[j].Points)
+			sumTotalPointsTest += float32(s.subjects[i].TestList[j].MaxPoints)
+		}
+
+		hwstr := "N/A"
+		ttstring := "N/A"
+		if sumTotalPointsHomework != 0 {
+			hwstr = fmt.Sprintf("%.2f %%", (sumPointsHomework*100)/sumTotalPointsHomework)
+		}
+		if sumTotalPointsTest != 0 {
+			ttstring = fmt.Sprintf("%.2f %%\n\n", (sumPointsTest*100)/sumTotalPointsTest)
+		}
+		fmt.Printf("%-15s | %-15s | %-20s\n", s.subjects[i].Name, hwstr, ttstring)
+	}
 }
 
 func convert(s string) (string, int, int, int) {

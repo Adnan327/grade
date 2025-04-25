@@ -5,14 +5,14 @@ import (
 	"flag"
 	"os"
 
-	"github.com/Adnan327/grader/grade"
+	"github.com/Adnan327/grader/internal/grader"
 )
 
 func main() {
 	command := os.Args[1]
 	args := os.Args[2:]
 	var (
-		subjectList  grade.SubjectStore
+		subjectList  grader.SubjectStore
 		subjectFlag  string
 		homeworkFlag string
 		testFlag     string
@@ -39,5 +39,7 @@ func main() {
 		} else if testFlag != "" {
 			subjectList.RemoveTest(testFlag)
 		}
+	case "list":
+		subjectList.GetTotalPercentage()
 	}
 }
