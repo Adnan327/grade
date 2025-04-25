@@ -1,6 +1,6 @@
-# Points Manager App 
+# Gradr - Points Manager CLI App
 
-This is a small CLI tool to help you track your test and homework points. It shows you the percentage of each subject at a glance.
+This is a small CLI tool to help you track your test and homework points. It shows you the percentage score of each subject at a glance.
 
 Go must be installed. When it is installed, execute the following command:
 ```shell
