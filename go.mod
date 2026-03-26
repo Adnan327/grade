@@ -1,3 +1,3 @@
-module github.com/Adnan327/grader
+module github.com/Adnan327/grade
 
-go 1.24.2
+go 1.26.1
