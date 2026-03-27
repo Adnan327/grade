@@ -5,7 +5,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/Adnan327/grader/internal/grader"
+	"github.com/Adnan327/grade/internal/grader"
 )
 
 func main() {

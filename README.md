@@ -4,7 +4,7 @@ This is a small CLI tool to help you track your test and homework points. It sho
 
 Go must be installed. When it is installed, execute the following command:
 ```shell
-go install github.com/Adnan327/grader/cmd/gradr@latest
+go install github.com/Adnan327/grade/cmd/gradr@latest
 ```
 
 
